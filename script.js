@@ -272,3 +272,93 @@
         });
 
     });
+
+/* ---------------- MEETING REQUEST CALENDAR ---------------- */
+(() => {
+  const modal = document.getElementById('meetingModal');
+  if (!modal) return;
+  const dayContainer = document.getElementById('meetingDays');
+  const timeContainer = document.getElementById('meetingTimes');
+  const form = document.getElementById('meetingRequestForm');
+  const feedback = document.getElementById('meetingFeedback');
+  const languageCopy = {"en":{"kicker":"PRIVATE APPOINTMENT","title":"Request a meeting","intro":"Choose a preferred day and time. Your request will be sent to Noa for approval.","dayLabel":"Choose a day","timeLabel":"Preferred time","nameLabel":"Your name","emailLabel":"Your email","messageLabel":"What would you like to discuss? (optional)","submit":"Send meeting request","note":"This is a request, not a confirmed booking. Noa will review it and reply by email.","noDay":"Please choose a day and time.","noSlots":"No suggested times for this day.","times":["10:00","11:30","13:00","15:00","16:30"]},"es":{"kicker":"CITA PRIVADA","title":"Solicitar una reunión","intro":"Elige el día y la hora que prefieras. Noa recibirá la solicitud para aprobarla.","dayLabel":"Elige un día","timeLabel":"Hora preferida","nameLabel":"Tu nombre","emailLabel":"Tu correo electrónico","messageLabel":"¿Qué te gustaría tratar? (opcional)","submit":"Enviar solicitud","note":"Es una solicitud, no una reserva confirmada. Noa la revisará y responderá por correo.","noDay":"Elige un día y una hora.","noSlots":"No hay horas sugeridas para este día.","times":["10:00","11:30","13:00","15:00","16:30"]},"it":{"kicker":"APPUNTAMENTO PRIVATO","title":"Richiedi un incontro","intro":"Scegli il giorno e l'orario preferiti. Noa riceverà la richiesta per approvarla.","dayLabel":"Scegli un giorno","timeLabel":"Orario preferito","nameLabel":"Il tuo nome","emailLabel":"La tua email","messageLabel":"Di cosa vorresti parlare? (facoltativo)","submit":"Invia la richiesta","note":"Questa è una richiesta, non una prenotazione confermata. Noa la esaminerà e risponderà via email.","noDay":"Scegli un giorno e un orario.","noSlots":"Nessun orario suggerito per questo giorno.","times":["10:00","11:30","13:00","15:00","16:30"]},"fr":{"kicker":"RENDEZ-VOUS PRIVÉ","title":"Demander un rendez-vous","intro":"Choisissez le jour et l'heure souhaités. Noa recevra la demande pour approbation.","dayLabel":"Choisir un jour","timeLabel":"Heure souhaitée","nameLabel":"Votre nom","emailLabel":"Votre e-mail","messageLabel":"Que souhaitez-vous aborder ? (facultatif)","submit":"Envoyer la demande","note":"Il s'agit d'une demande, pas d'une réservation confirmée. Noa la examinera et répondra par e-mail.","noDay":"Choisissez un jour et une heure.","noSlots":"Aucun horaire suggéré pour ce jour.","times":["10:00","11:30","13:00","15:00","16:30"]},"de":{"kicker":"PERSÖNLICHER TERMIN","title":"Gespräch anfragen","intro":"Wählen Sie Ihren Wunschtag und eine Uhrzeit. Noa erhält die Anfrage zur Freigabe.","dayLabel":"Tag auswählen","timeLabel":"Wunschzeit","nameLabel":"Ihr Name","emailLabel":"Ihre E-Mail","messageLabel":"Worüber möchten Sie sprechen? (optional)","submit":"Anfrage senden","note":"Dies ist eine Anfrage, keine bestätigte Buchung. Noa prüft sie und antwortet per E-Mail.","noDay":"Bitte wählen Sie Tag und Uhrzeit.","noSlots":"Für diesen Tag sind keine Zeiten vorgeschlagen.","times":["10:00","11:30","13:00","15:00","16:30"]},"nl":{"kicker":"PERSOONLIJKE AFSPRAAK","title":"Een gesprek aanvragen","intro":"Kies de gewenste dag en tijd. Noa ontvangt het verzoek ter goedkeuring.","dayLabel":"Kies een dag","timeLabel":"Gewenste tijd","nameLabel":"Je naam","emailLabel":"Je e-mailadres","messageLabel":"Waarover wil je praten? (optioneel)","submit":"Verzoek versturen","note":"Dit is een verzoek, geen bevestigde boeking. Noa beoordeelt het en reageert per e-mail.","noDay":"Kies een dag en tijd.","noSlots":"Geen voorgestelde tijden voor deze dag.","times":["10:00","11:30","13:00","15:00","16:30"]}};
+  let activeLang = document.documentElement.lang || 'en';
+  let selectedDay = '';
+  let selectedTime = '';
+  let lastTrigger = null;
+  const dateFormat = (date, locale, opts) => new Intl.DateTimeFormat(locale, opts).format(date);
+  const localeFor = {en:'en-GB',es:'es-ES',it:'it-IT',fr:'fr-FR',de:'de-DE',nl:'nl-NL'};
+  function strings(){ return languageCopy[activeLang] || languageCopy.en; }
+  function applyCopy(){
+    activeLang = document.documentElement.lang || 'en';
+    const d = strings();
+    modal.querySelectorAll('[data-meeting-copy]').forEach(el => {
+      const key = el.dataset.meetingCopy;
+      if (d[key]) el.textContent = d[key];
+    });
+    renderDays();
+    renderTimes();
+  }
+  function renderDays(){
+    dayContainer.innerHTML = '';
+    const locale = localeFor[activeLang] || 'en-GB';
+    for(let offset=1; offset<=14; offset++){
+      const date = new Date();
+      date.setHours(12,0,0,0);
+      date.setDate(date.getDate()+offset);
+      if(date.getDay()===0 || date.getDay()===6) continue;
+      const iso = date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+      const btn = document.createElement('button');
+      btn.type='button'; btn.className='meeting-choice'+(selectedDay===iso?' selected':'');
+      btn.textContent = dateFormat(date,locale,{weekday:'short',day:'2-digit',month:'short'});
+      btn.setAttribute('aria-pressed',String(selectedDay===iso));
+      btn.addEventListener('click',()=>{selectedDay=iso;selectedTime='';feedback.textContent='';renderDays();renderTimes();});
+      dayContainer.appendChild(btn);
+    }
+  }
+  function renderTimes(){
+    timeContainer.innerHTML = '';
+    const d = strings();
+    if(!selectedDay){ const hint=document.createElement('span'); hint.className='meeting-note'; hint.textContent=d.noDay; timeContainer.appendChild(hint); return; }
+    d.times.forEach(time=>{
+      const btn=document.createElement('button'); btn.type='button';
+      btn.className='meeting-choice'+(selectedTime===time?' selected':''); btn.textContent=time;
+      btn.setAttribute('aria-pressed',String(selectedTime===time));
+      btn.addEventListener('click',()=>{selectedTime=time;feedback.textContent='';renderTimes();});
+      timeContainer.appendChild(btn);
+    });
+  }
+  function openModal(event){
+    lastTrigger=event.currentTarget;
+    selectedDay=''; selectedTime=''; feedback.textContent='';
+    applyCopy(); modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    const close=modal.querySelector('.meeting-close'); if(close) close.focus();
+  }
+  function closeModal(){
+    modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+    if(lastTrigger) lastTrigger.focus();
+  }
+  document.querySelectorAll('[data-meeting-button]').forEach(btn=>btn.addEventListener('click',openModal));
+  modal.querySelectorAll('[data-close-meeting]').forEach(el=>el.addEventListener('click',closeModal));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape' && modal.classList.contains('open')) closeModal();});
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const d=strings();
+    if(!selectedDay || !selectedTime){feedback.textContent=d.noDay;return;}
+    const data=new FormData(form);
+    const name=String(data.get('visitorName')||'').trim();
+    const email=String(data.get('visitorEmail')||'').trim();
+    const message=String(data.get('visitorMessage')||'').trim();
+    const locale=localeFor[activeLang]||'en-GB';
+    const prettyDate=dateFormat(new Date(selectedDay+'T12:00:00'),locale,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    const subject=encodeURIComponent('Meeting request — '+prettyDate+' at '+selectedTime);
+    const body=encodeURIComponent('Meeting request for Noa Younes Regidor\n\nPreferred date: '+prettyDate+'\nPreferred time: '+selectedTime+' (Madrid time)\nName: '+name+'\nEmail: '+email+'\n\nMessage: '+(message||'—')+'\n\nPlease confirm or suggest another time.');
+    window.location.href='mailto:noa.younes.regidor@outlook.com?subject='+subject+'&body='+body;
+    feedback.textContent=d.note;
+  });
+  const langObserver=new MutationObserver(()=>applyCopy());
+  langObserver.observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  applyCopy();
+})();
