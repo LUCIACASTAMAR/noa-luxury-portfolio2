@@ -4,6 +4,8 @@
  */
 (() => {
   const KEY = 'noa-cookie-preferences-v1';
+  // Add the GA4 Measurement ID here after creating the web data stream.
+  const GA4_MEASUREMENT_ID = '';
   const banner = document.getElementById('cookieBanner');
   if (!banner) return;
 
@@ -94,6 +96,32 @@
       return raw ? JSON.parse(raw) : null;
     } catch (_) { return null; }
   }
+  let analyticsLoaded = false;
+  function applyAnalyticsConsent(preferences) {
+    if (!preferences || !preferences.analytics || !GA4_MEASUREMENT_ID || analyticsLoaded) return;
+    analyticsLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ window.dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied'
+    });
+    gtag('consent', 'update', {
+      analytics_storage: 'granted',
+      ad_storage: preferences.marketing ? 'granted' : 'denied',
+      ad_user_data: preferences.marketing ? 'granted' : 'denied',
+      ad_personalization: preferences.marketing ? 'granted' : 'denied'
+    });
+    const tag = document.createElement('script');
+    tag.async = true;
+    tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA4_MEASUREMENT_ID);
+    document.head.appendChild(tag);
+    gtag('config', GA4_MEASUREMENT_ID, { anonymize_ip: true });
+  }
   function store(value) {
     const preferences = {
       necessary: true,
@@ -105,6 +133,7 @@
     banner.hidden = true;
     manageLink.hidden = false;
     document.dispatchEvent(new CustomEvent('noa:cookie-consent', { detail: preferences }));
+    applyAnalyticsConsent(preferences);
   }
   function openPreferences() {
     const saved = read();
@@ -122,6 +151,7 @@
       banner.hidden = true;
       manageLink.hidden = false;
       document.dispatchEvent(new CustomEvent('noa:cookie-consent', { detail: saved }));
+      applyAnalyticsConsent(saved);
     } else {
       banner.hidden = false;
       manageLink.hidden = true;
