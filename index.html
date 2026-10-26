@@ -415,6 +415,39 @@
     </form>
   </section>
 </div>
+
+<!-- Cookie consent: optional cookies stay disabled unless the visitor opts in. -->
+<section class="cookie-banner" id="cookieBanner" role="dialog" aria-modal="false" aria-labelledby="cookieTitle" aria-describedby="cookieDescription" hidden>
+  <p class="cookie-eyebrow" data-cookie="eyebrow">YOUR PRIVACY</p>
+  <h2 id="cookieTitle" data-cookie="title">A considered approach to privacy.</h2>
+  <p class="cookie-copy" id="cookieDescription" data-cookie="description">This website uses essential storage to work properly. With your permission, optional analytics or marketing technologies may be enabled.</p>
+  <div class="cookie-actions">
+    <button type="button" class="cookie-reject" id="cookieReject" data-cookie="reject">Reject optional</button>
+    <button type="button" class="cookie-configure" id="cookieConfigure" aria-expanded="false" aria-controls="cookieSettings" data-cookie="configure">Configure</button>
+    <button type="button" class="cookie-accept" id="cookieAccept" data-cookie="accept">Accept all</button>
+  </div>
+  <div class="cookie-settings" id="cookieSettings" hidden>
+    <h2 data-cookie="settingsTitle">Cookie preferences</h2>
+    <div class="cookie-setting-row">
+      <div><strong data-cookie="essential">Essential storage</strong><small data-cookie="essentialDesc">Required for basic site functionality and remembering your choice.</small></div>
+      <input type="checkbox" checked disabled aria-label="Essential storage always active">
+    </div>
+    <div class="cookie-setting-row">
+      <div><strong data-cookie="analytics">Analytics</strong><small data-cookie="analyticsDesc">Helps understand how visitors use the website. Not enabled unless you consent.</small></div>
+      <input type="checkbox" id="cookieAnalytics">
+    </div>
+    <div class="cookie-setting-row">
+      <div><strong data-cookie="marketing">Marketing</strong><small data-cookie="marketingDesc">Allows marketing or advertising technologies. Not enabled unless you consent.</small></div>
+      <input type="checkbox" id="cookieMarketing">
+    </div>
+    <div class="cookie-actions">
+      <button type="button" class="cookie-reject" id="cookieSave" data-cookie="save">Save preferences</button>
+    </div>
+  </div>
+  <p class="cookie-footer-links"><span data-cookie="footer">You can change your choice at any time.</span> · <button type="button" id="cookieFooterManage" data-cookie="manage">Cookie settings</button></p>
+</section>
+<button type="button" class="cookie-manage-link" id="cookieManageLink" data-cookie="manage" hidden>Cookie settings</button>
+
 <!-- FOOTER -->
 <footer>
 <span>
@@ -424,6 +457,7 @@
         Luxury Marketing · Madrid
     </span>
 </footer>
+<script defer="" src="cookie-consent.js?v=1"></script>
 <script defer="" src="script.js?v=101"></script>
 </body>
 </html>
