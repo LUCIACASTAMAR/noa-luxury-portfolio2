@@ -145,14 +145,14 @@
             projects.forEach((project, i) => {
                 const k = pkeys[i]; if (!k) return;
                 put(`#work .project:nth-of-type(${i + 1}) .project-category`, d[k[0]]);
-                put(`#work .project:nth-of-type(${i + 1}) .project-title`, d[k[1]]);
+                put(`#work .project:nth-of-type(${i + 1}) .project-title-link`, d[k[1]]);
                 put(`#work .project:nth-of-type(${i + 1}) .project-description`, d[k[2]]);
             });
             // nth-of-type can be affected by structure; also set by NodeList for certainty.
             projects.forEach((project, i) => {
                 const k = pkeys[i]; if (!k) return;
                 putEl(project.querySelector('.project-category'), d[k[0]]);
-                putEl(project.querySelector('.project-title'), d[k[1]]);
+                putEl(project.querySelector('.project-title-link') || project.querySelector('.project-title'), d[k[1]]);
                 putEl(project.querySelector('.project-description'), d[k[2]]);
             });
 
