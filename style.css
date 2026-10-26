@@ -985,3 +985,16 @@ h1:hover em, h2:hover em {
   .cookie-actions { flex-direction: column; }
   .cookie-actions button { flex: auto; width: 100%; }
 }
+
+
+/* Ensure portfolio article links remain tappable on touch devices */
+.project-info { position: relative; z-index: 6; }
+.project-title { position: relative; z-index: 6; }
+.project-title-link {
+  position: relative;
+  z-index: 7;
+  display: inline-block;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(84, 31, 42, .18);
+}
