@@ -800,3 +800,78 @@
     .hero::before { animation: none; }
     .button-meeting { transition: none; }
 }
+
+
+/* ---------------- CREATIVE LUXURY MOTION ---------------- */
+.hero {
+    background:
+        radial-gradient(ellipse at 12% 88%, rgba(181,154,106,.17), transparent 31%),
+        radial-gradient(ellipse at 83% 18%, rgba(84,31,42,.12), transparent 30%),
+        radial-gradient(ellipse at 65% 80%, rgba(201,177,143,.2), transparent 34%),
+        linear-gradient(130deg, #fbf8f3 0%, #f1e8df 46%, #faf6f0 100%);
+}
+.hero::before {
+    inset: -25%;
+    background:
+        radial-gradient(ellipse at 25% 30%, rgba(181,154,106,.26) 0, transparent 24%),
+        radial-gradient(ellipse at 70% 30%, rgba(84,31,42,.18) 0, transparent 25%),
+        radial-gradient(ellipse at 58% 75%, rgba(213,194,164,.34) 0, transparent 27%),
+        radial-gradient(ellipse at 90% 80%, rgba(84,31,42,.11) 0, transparent 22%);
+    filter: blur(24px);
+    animation: luxuryGlow 20s cubic-bezier(.45,0,.55,1) infinite alternate;
+}
+.hero::after {
+    opacity: .26;
+    background-image:
+        linear-gradient(rgba(84,31,42,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(84,31,42,.055) 1px, transparent 1px),
+        radial-gradient(ellipse at center, transparent 35%, rgba(84,31,42,.07) 100%);
+    background-size: 64px 64px, 64px 64px, 100% 100%;
+    mask-image: linear-gradient(100deg, transparent 0%, black 42%, black 100%);
+}
+.hero-copy h1 {
+    transition: letter-spacing .55s cubic-bezier(.2,.7,.2,1), transform .55s cubic-bezier(.2,.7,.2,1);
+    transform-origin: left center;
+}
+.hero-copy h1:hover {
+    letter-spacing: -.025em;
+    transform: translateY(-3px);
+}
+h1 em, h2 em {
+    transition: color .45s ease, text-shadow .45s ease;
+}
+h1:hover em, h2:hover em {
+    color: #8a3b49;
+    text-shadow: 0 8px 28px rgba(84,31,42,.12);
+}
+.section-title, .intro h2, .experience h2, .contact h2, .credentials h2,
+.education h2, .expertise h2, .project-title, .expertise-item h3, .education-item h3 {
+    transition: color .35s ease, transform .4s cubic-bezier(.2,.7,.2,1);
+    transform-origin: left center;
+}
+.section-title:hover, .intro h2:hover, .experience h2:hover, .contact h2:hover,
+.credentials h2:hover, .education h2:hover, .expertise h2:hover,
+.project-title:hover, .expertise-item h3:hover, .education-item h3:hover {
+    color: var(--burgundy);
+    transform: translateX(5px);
+}
+.intro h2:hover, .credentials h2:hover {
+    color: #f7f4ef;
+}
+.intro h2:hover em {
+    color: #d9bd8b;
+}
+.project-title:hover, .expertise-item h3:hover, .education-item h3:hover {
+    text-shadow: 0 5px 22px rgba(84,31,42,.10);
+}
+.button, .nav-links a {
+    transition: color .3s ease, background-color .3s ease, border-color .3s ease, transform .3s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+    .hero::before { animation: none; }
+    .hero-copy h1, h1 em, h2 em, .section-title, .intro h2, .experience h2,
+    .contact h2, .credentials h2, .education h2, .expertise h2,
+    .project-title, .expertise-item h3, .education-item h3, .button, .nav-links a {
+        transition: none;
+    }
+}
