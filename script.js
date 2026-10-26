@@ -275,19 +275,30 @@
 
 /* ---------------- MEETING REQUEST CALENDAR ---------------- */
 (() => {
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyxmRq1r3w2SKZgImlZwHZsgUXum_keD20bTW24keQK3lanuajeY0F-0AZay_Fz7yJv/exec';
   const modal = document.getElementById('meetingModal');
   if (!modal) return;
   const dayContainer = document.getElementById('meetingDays');
   const timeContainer = document.getElementById('meetingTimes');
   const form = document.getElementById('meetingRequestForm');
   const feedback = document.getElementById('meetingFeedback');
-  const languageCopy = {"en":{"kicker":"PRIVATE APPOINTMENT","title":"Request a meeting","intro":"Choose a preferred day and time. Your request will be sent to Noa for approval.","dayLabel":"Choose a day","timeLabel":"Preferred time","nameLabel":"Your name","emailLabel":"Your email","messageLabel":"What would you like to discuss? (optional)","submit":"Send meeting request","note":"This is a request, not a confirmed booking. Noa will review it and reply by email.","noDay":"Please choose a day and time.","noSlots":"No suggested times for this day.","times":["10:00","11:30","13:00","15:00","16:30"]},"es":{"kicker":"CITA PRIVADA","title":"Solicitar una reunión","intro":"Elige el día y la hora que prefieras. Noa recibirá la solicitud para aprobarla.","dayLabel":"Elige un día","timeLabel":"Hora preferida","nameLabel":"Tu nombre","emailLabel":"Tu correo electrónico","messageLabel":"¿Qué te gustaría tratar? (opcional)","submit":"Enviar solicitud","note":"Es una solicitud, no una reserva confirmada. Noa la revisará y responderá por correo.","noDay":"Elige un día y una hora.","noSlots":"No hay horas sugeridas para este día.","times":["10:00","11:30","13:00","15:00","16:30"]},"it":{"kicker":"APPUNTAMENTO PRIVATO","title":"Richiedi un incontro","intro":"Scegli il giorno e l'orario preferiti. Noa riceverà la richiesta per approvarla.","dayLabel":"Scegli un giorno","timeLabel":"Orario preferito","nameLabel":"Il tuo nome","emailLabel":"La tua email","messageLabel":"Di cosa vorresti parlare? (facoltativo)","submit":"Invia la richiesta","note":"Questa è una richiesta, non una prenotazione confermata. Noa la esaminerà e risponderà via email.","noDay":"Scegli un giorno e un orario.","noSlots":"Nessun orario suggerito per questo giorno.","times":["10:00","11:30","13:00","15:00","16:30"]},"fr":{"kicker":"RENDEZ-VOUS PRIVÉ","title":"Demander un rendez-vous","intro":"Choisissez le jour et l'heure souhaités. Noa recevra la demande pour approbation.","dayLabel":"Choisir un jour","timeLabel":"Heure souhaitée","nameLabel":"Votre nom","emailLabel":"Votre e-mail","messageLabel":"Que souhaitez-vous aborder ? (facultatif)","submit":"Envoyer la demande","note":"Il s'agit d'une demande, pas d'une réservation confirmée. Noa la examinera et répondra par e-mail.","noDay":"Choisissez un jour et une heure.","noSlots":"Aucun horaire suggéré pour ce jour.","times":["10:00","11:30","13:00","15:00","16:30"]},"de":{"kicker":"PERSÖNLICHER TERMIN","title":"Gespräch anfragen","intro":"Wählen Sie Ihren Wunschtag und eine Uhrzeit. Noa erhält die Anfrage zur Freigabe.","dayLabel":"Tag auswählen","timeLabel":"Wunschzeit","nameLabel":"Ihr Name","emailLabel":"Ihre E-Mail","messageLabel":"Worüber möchten Sie sprechen? (optional)","submit":"Anfrage senden","note":"Dies ist eine Anfrage, keine bestätigte Buchung. Noa prüft sie und antwortet per E-Mail.","noDay":"Bitte wählen Sie Tag und Uhrzeit.","noSlots":"Für diesen Tag sind keine Zeiten vorgeschlagen.","times":["10:00","11:30","13:00","15:00","16:30"]},"nl":{"kicker":"PERSOONLIJKE AFSPRAAK","title":"Een gesprek aanvragen","intro":"Kies de gewenste dag en tijd. Noa ontvangt het verzoek ter goedkeuring.","dayLabel":"Kies een dag","timeLabel":"Gewenste tijd","nameLabel":"Je naam","emailLabel":"Je e-mailadres","messageLabel":"Waarover wil je praten? (optioneel)","submit":"Verzoek versturen","note":"Dit is een verzoek, geen bevestigde boeking. Noa beoordeelt het en reageert per e-mail.","noDay":"Kies een dag en tijd.","noSlots":"Geen voorgestelde tijden voor deze dag.","times":["10:00","11:30","13:00","15:00","16:30"]}};
+  const submitButton = form.querySelector('[type="submit"]');
+  const languageCopy = {
+    en:{kicker:"PRIVATE APPOINTMENT",title:"Request a meeting",intro:"Choose an available day and time. Noa will review your request before confirming it.",dayLabel:"Choose a day",timeLabel:"Available times",nameLabel:"Your name",emailLabel:"Your email",messageLabel:"What would you like to discuss? (optional)",submit:"Send meeting request",note:"This is a request, not a confirmed booking. Noa will review it and reply by email.",noDay:"Choose a day and time.",noSlots:"No available times for this day.",loading:"Checking calendar availability…",loadError:"Availability could not be loaded. Please try again in a moment.",sending:"Sending your request…",sent:"Your request has been submitted. It is pending Noa’s approval; this is not a confirmed booking.",sendError:"We couldn’t send the request. Please try again.",times:[]},
+    es:{kicker:"CITA PRIVADA",title:"Solicitar una reunión",intro:"Elige un día y una hora disponibles. Noa revisará la solicitud antes de confirmarla.",dayLabel:"Elige un día",timeLabel:"Horas disponibles",nameLabel:"Tu nombre",emailLabel:"Tu correo electrónico",messageLabel:"¿Qué te gustaría tratar? (opcional)",submit:"Enviar solicitud",note:"Es una solicitud, no una reserva confirmada. Noa la revisará y responderá por correo.",noDay:"Elige un día y una hora.",noSlots:"No hay horas disponibles para este día.",loading:"Consultando disponibilidad del calendario…",loadError:"No se ha podido consultar la disponibilidad. Inténtalo de nuevo en unos momentos.",sending:"Enviando la solicitud…",sent:"Solicitud enviada. Está pendiente de aprobación por Noa; todavía no es una reserva confirmada.",sendError:"No se ha podido enviar la solicitud. Inténtalo de nuevo.",times:[]},
+    it:{kicker:"APPUNTAMENTO PRIVATO",title:"Richiedi un incontro",intro:"Scegli un giorno e un orario disponibili. Noa esaminerà la richiesta prima di confermarla.",dayLabel:"Scegli un giorno",timeLabel:"Orari disponibili",nameLabel:"Il tuo nome",emailLabel:"La tua email",messageLabel:"Di cosa vorresti parlare? (facoltativo)",submit:"Invia la richiesta",note:"Questa è una richiesta, non una prenotazione confermata.",noDay:"Scegli un giorno e un orario.",noSlots:"Nessun orario disponibile per questo giorno.",loading:"Verifica della disponibilità…",loadError:"Impossibile caricare la disponibilità. Riprova tra poco.",sending:"Invio della richiesta…",sent:"Richiesta inviata, in attesa dell’approvazione di Noa. Non è ancora una prenotazione confermata.",sendError:"Invio non riuscito. Riprova.",times:[]},
+    fr:{kicker:"RENDEZ-VOUS PRIVÉ",title:"Demander un rendez-vous",intro:"Choisissez un jour et un horaire disponibles. Noa examinera la demande avant de la confirmer.",dayLabel:"Choisir un jour",timeLabel:"Horaires disponibles",nameLabel:"Votre nom",emailLabel:"Votre e-mail",messageLabel:"Que souhaitez-vous aborder ? (facultatif)",submit:"Envoyer la demande",note:"Il s'agit d'une demande, pas d'une réservation confirmée.",noDay:"Choisissez un jour et un horaire.",noSlots:"Aucun horaire disponible ce jour-là.",loading:"Vérification des disponibilités…",loadError:"Impossible de charger les disponibilités. Réessayez dans un instant.",sending:"Envoi de la demande…",sent:"Demande envoyée, en attente de l’approbation de Noa. Le rendez-vous n’est pas encore confirmé.",sendError:"L’envoi a échoué. Veuillez réessayer.",times:[]},
+    de:{kicker:"PERSÖNLICHER TERMIN",title:"Gespräch anfragen",intro:"Wählen Sie einen verfügbaren Tag und eine Uhrzeit. Noa prüft die Anfrage vor der Bestätigung.",dayLabel:"Tag auswählen",timeLabel:"Verfügbare Zeiten",nameLabel:"Ihr Name",emailLabel:"Ihre E-Mail",messageLabel:"Worüber möchten Sie sprechen? (optional)",submit:"Anfrage senden",note:"Dies ist eine Anfrage, keine bestätigte Buchung.",noDay:"Bitte wählen Sie Tag und Uhrzeit.",noSlots:"Für diesen Tag sind keine Zeiten verfügbar.",loading:"Kalenderverfügbarkeit wird geprüft…",loadError:"Verfügbarkeit konnte nicht geladen werden. Bitte versuchen Sie es erneut.",sending:"Anfrage wird gesendet…",sent:"Anfrage gesendet und wartet auf Noas Genehmigung. Der Termin ist noch nicht bestätigt.",sendError:"Anfrage konnte nicht gesendet werden. Bitte erneut versuchen.",times:[]},
+    nl:{kicker:"PERSOONLIJKE AFSPRAAK",title:"Een gesprek aanvragen",intro:"Kies een beschikbare dag en tijd. Noa beoordeelt het verzoek voordat ze het bevestigt.",dayLabel:"Kies een dag",timeLabel:"Beschikbare tijden",nameLabel:"Je naam",emailLabel:"Je e-mailadres",messageLabel:"Waarover wil je praten? (optioneel)",submit:"Verzoek versturen",note:"Dit is een verzoek, geen bevestigde boeking.",noDay:"Kies een dag en tijd.",noSlots:"Geen beschikbare tijden op deze dag.",loading:"Beschikbaarheid controleren…",loadError:"Beschikbaarheid kon niet worden geladen. Probeer het zo opnieuw.",sending:"Verzoek wordt verzonden…",sent:"Verzoek verzonden en wacht op goedkeuring van Noa. De afspraak is nog niet bevestigd.",sendError:"Verzenden is niet gelukt. Probeer het opnieuw.",times:[]}
+  };
   let activeLang = document.documentElement.lang || 'en';
   let selectedDay = '';
   let selectedTime = '';
+  let availability = [];
   let lastTrigger = null;
-  const dateFormat = (date, locale, opts) => new Intl.DateTimeFormat(locale, opts).format(date);
+  let loadingAvailability = false;
   const localeFor = {en:'en-GB',es:'es-ES',it:'it-IT',fr:'fr-FR',de:'de-DE',nl:'nl-NL'};
+  const dateFormat = (date, locale, opts) => new Intl.DateTimeFormat(locale, opts).format(date);
   function strings(){ return languageCopy[activeLang] || languageCopy.en; }
   function applyCopy(){
     activeLang = document.documentElement.lang || 'en';
@@ -299,28 +310,59 @@
     renderDays();
     renderTimes();
   }
+  function loadAvailability(){
+    loadingAvailability = true;
+    dayContainer.innerHTML = '';
+    timeContainer.textContent = strings().loading;
+    feedback.textContent = '';
+    const callback = '__noaAvailability_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+    const script = document.createElement('script');
+    let finished = false;
+    const timeout = window.setTimeout(() => finishError(), 12000);
+    function finishError(){
+      if (finished) return;
+      finished = true; window.clearTimeout(timeout);
+      delete window[callback]; script.remove(); loadingAvailability = false;
+      dayContainer.innerHTML = '';
+      feedback.textContent = strings().loadError;
+      renderTimes();
+    }
+    window[callback] = data => {
+      if (finished) return;
+      finished = true; window.clearTimeout(timeout);
+      delete window[callback]; script.remove(); loadingAvailability = false;
+      if (!data || !data.ok || !Array.isArray(data.days)) { finishError(); return; }
+      availability = data.days;
+      selectedDay = ''; selectedTime = '';
+      renderDays(); renderTimes();
+    };
+    script.onerror = finishError;
+    script.src = API_URL + '?action=availability&days=14&callback=' + callback;
+    document.head.appendChild(script);
+  }
   function renderDays(){
     dayContainer.innerHTML = '';
     const locale = localeFor[activeLang] || 'en-GB';
-    for(let offset=1; offset<=14; offset++){
-      const date = new Date();
-      date.setHours(12,0,0,0);
-      date.setDate(date.getDate()+offset);
-      if(date.getDay()===0 || date.getDay()===6) continue;
-      const iso = date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+    availability.forEach(item => {
+      const date = new Date(item.date + 'T12:00:00');
       const btn = document.createElement('button');
-      btn.type='button'; btn.className='meeting-choice'+(selectedDay===iso?' selected':'');
+      btn.type='button'; btn.className='meeting-choice'+(selectedDay===item.date?' selected':'');
       btn.textContent = dateFormat(date,locale,{weekday:'short',day:'2-digit',month:'short'});
-      btn.setAttribute('aria-pressed',String(selectedDay===iso));
-      btn.addEventListener('click',()=>{selectedDay=iso;selectedTime='';feedback.textContent='';renderDays();renderTimes();});
+      btn.setAttribute('aria-pressed',String(selectedDay===item.date));
+      btn.addEventListener('click',()=>{selectedDay=item.date;selectedTime='';feedback.textContent='';renderDays();renderTimes();});
       dayContainer.appendChild(btn);
-    }
+    });
+    if (!loadingAvailability && !availability.length) feedback.textContent = strings().loadError;
   }
   function renderTimes(){
     timeContainer.innerHTML = '';
     const d = strings();
+    if(loadingAvailability){timeContainer.textContent=d.loading;return;}
     if(!selectedDay){ const hint=document.createElement('span'); hint.className='meeting-note'; hint.textContent=d.noDay; timeContainer.appendChild(hint); return; }
-    d.times.forEach(time=>{
+    const day = availability.find(item => item.date === selectedDay);
+    const times = day && Array.isArray(day.times) ? day.times : [];
+    if(!times.length){ const hint=document.createElement('span'); hint.className='meeting-note'; hint.textContent=d.noSlots; timeContainer.appendChild(hint); return; }
+    times.forEach(time=>{
       const btn=document.createElement('button'); btn.type='button';
       btn.className='meeting-choice'+(selectedTime===time?' selected':''); btn.textContent=time;
       btn.setAttribute('aria-pressed',String(selectedTime===time));
@@ -330,9 +372,10 @@
   }
   function openModal(event){
     lastTrigger=event.currentTarget;
-    selectedDay=''; selectedTime=''; feedback.textContent='';
+    selectedDay=''; selectedTime=''; availability=[]; feedback.textContent='';
     applyCopy(); modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';
+    loadAvailability();
     const close=modal.querySelector('.meeting-close'); if(close) close.focus();
   }
   function closeModal(){
@@ -343,20 +386,33 @@
   document.querySelectorAll('[data-meeting-button]').forEach(btn=>btn.addEventListener('click',openModal));
   modal.querySelectorAll('[data-close-meeting]').forEach(el=>el.addEventListener('click',closeModal));
   document.addEventListener('keydown',e=>{if(e.key==='Escape' && modal.classList.contains('open')) closeModal();});
-  form.addEventListener('submit',e=>{
+  form.addEventListener('submit',async e=>{
     e.preventDefault();
     const d=strings();
     if(!selectedDay || !selectedTime){feedback.textContent=d.noDay;return;}
+    if(!availability.some(item=>item.date===selectedDay && item.times.includes(selectedTime))){feedback.textContent=d.loadError;loadAvailability();return;}
     const data=new FormData(form);
-    const name=String(data.get('visitorName')||'').trim();
-    const email=String(data.get('visitorEmail')||'').trim();
-    const message=String(data.get('visitorMessage')||'').trim();
-    const locale=localeFor[activeLang]||'en-GB';
-    const prettyDate=dateFormat(new Date(selectedDay+'T12:00:00'),locale,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-    const subject=encodeURIComponent('Meeting request — '+prettyDate+' at '+selectedTime);
-    const body=encodeURIComponent('Meeting request for Noa Younes Regidor\n\nPreferred date: '+prettyDate+'\nPreferred time: '+selectedTime+' (Madrid time)\nName: '+name+'\nEmail: '+email+'\n\nMessage: '+(message||'—')+'\n\nPlease confirm or suggest another time.');
-    window.location.href='mailto:noa.younes.regidor@outlook.com?subject='+subject+'&body='+body;
-    feedback.textContent=d.note;
+    const payload = new URLSearchParams({
+      name:String(data.get('visitorName')||'').trim(),
+      email:String(data.get('visitorEmail')||'').trim(),
+      message:String(data.get('visitorMessage')||'').trim(),
+      date:selectedDay,
+      time:selectedTime
+    });
+    submitButton.disabled = true;
+    feedback.textContent = d.sending;
+    try {
+      // Apps Script is cross-origin; no-cors sends a simple form POST without opening an email client.
+      // The opaque response cannot prove the server accepted it; confirmation is phrased as pending submission.
+      await fetch(API_URL, {method:'POST', mode:'no-cors', body:payload});
+      feedback.textContent = d.sent;
+      form.reset(); selectedDay=''; selectedTime='';
+      loadAvailability();
+    } catch (err) {
+      feedback.textContent = d.sendError;
+    } finally {
+      submitButton.disabled = false;
+    }
   });
   const langObserver=new MutationObserver(()=>applyCopy());
   langObserver.observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
