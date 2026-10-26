@@ -875,3 +875,57 @@ h1:hover em, h2:hover em {
         transition: none;
     }
 }
+
+
+/* Contact finale: restrained atelier sketch */
+.contact { position: relative; overflow: hidden; isolation: isolate; background: #f7f4ef; }
+.contact-inner { position: relative; z-index: 2; max-width: 900px; }
+.contact-fashion-sketch {
+    position: absolute; z-index: 1; right: 3vw; bottom: 0; width: min(31vw, 390px);
+    height: 82%; opacity: .66; pointer-events: none; color: #4d3931;
+}
+.contact-fashion-sketch svg { width: 100%; height: 100%; overflow: visible; }
+.contact::before {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(ellipse at 82% 45%, rgba(181,154,106,.07), transparent 32%);
+}
+.contact-links { position: relative; z-index: 3; }
+.contact-links .button { cursor: pointer; font-family: inherit; }
+.meeting-modal { position: fixed; inset: 0; z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
+.meeting-modal.open { display: flex; }
+.meeting-backdrop { position: absolute; inset: 0; background: rgba(17,17,17,.58); backdrop-filter: blur(5px); }
+.meeting-dialog {
+    position: relative; z-index: 1; width: min(650px, 100%); max-height: min(90vh, 850px); overflow-y: auto;
+    padding: clamp(24px, 4vw, 42px); background: #f7f4ef; color: #171514; border: 1px solid rgba(181,154,106,.65);
+    box-shadow: 0 25px 80px rgba(0,0,0,.25);
+}
+.meeting-close { position: absolute; top: 12px; right: 16px; border: 0; background: transparent; font-size: 30px; color: #541f2a; cursor: pointer; }
+.meeting-kicker { font-size: 10px; letter-spacing: .24em; color: #9a7b52; text-transform: uppercase; }
+.meeting-dialog h2 { margin: 10px 32px 8px 0; font: 400 clamp(30px,5vw,44px)/1.1 "Playfair Display",serif; }
+.meeting-intro { font-size: 13px; color: #77716a; margin-bottom: 24px; }
+.meeting-field { margin: 18px 0; }
+.meeting-field > label, .meeting-form-grid label, .meeting-message-label { display: block; font-size: 11px; letter-spacing: .06em; color: #4f4943; }
+.meeting-days, .meeting-times { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.meeting-choice { border: 1px solid #d8cec2; color: #4a3a33; background: transparent; padding: 10px 12px; min-width: 66px; cursor: pointer; font: 11px "DM Sans",sans-serif; transition: .2s ease; }
+.meeting-choice:hover, .meeting-choice.selected { background: #541f2a; color: white; border-color: #541f2a; }
+.meeting-choice:disabled { opacity: .35; cursor: not-allowed; }
+.meeting-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; }
+.meeting-dialog input, .meeting-dialog textarea {
+    display: block; width: 100%; margin-top: 7px; padding: 11px 12px; border: 1px solid #d8cec2;
+    background: rgba(255,255,255,.5); color: #171514; border-radius: 0; font: 13px "DM Sans",sans-serif;
+}
+.meeting-dialog input:focus, .meeting-dialog textarea:focus { outline: 1px solid #541f2a; border-color: #541f2a; }
+.meeting-message-label { margin-top: 14px; }
+.meeting-submit { width: 100%; margin-top: 18px; cursor: pointer; }
+.meeting-note, .meeting-feedback { margin-top: 10px; color: #77716a; font-size: 11px; }
+.meeting-feedback { color: #541f2a; }
+@media(max-width: 900px) {
+  .contact-fashion-sketch { right: -4vw; width: 38vw; opacity: .25; }
+  .contact-inner { z-index: 2; }
+}
+@media(max-width: 600px) {
+  .contact-fashion-sketch { right: -10vw; width: 56vw; height: 65%; opacity: .16; }
+  .meeting-form-grid { grid-template-columns: 1fr; }
+  .meeting-dialog { padding: 26px 20px; }
+}
+@media(prefers-reduced-motion: reduce) { .meeting-choice { transition: none; } }
