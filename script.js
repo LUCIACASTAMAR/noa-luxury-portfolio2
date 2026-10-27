@@ -101,7 +101,83 @@
             document.title = titles[lang] || titles.en;
         }
 
-        function applyLanguage(lang) {
+        
+    const PRESS_TRANSLATIONS = {
+      en: [
+        "Noa’s bylined feature on the evolution of fashion advisors into brand ambassadors and the growing importance of client experience in luxury retail.",
+        "The Benelux edition of Noa’s article on the changing role of sales advisors in fashion and luxury.",
+        "Noa’s Spanish-language feature, published under her name as Marketing Manager at Luxe Talent and Project Manager of the Retail Academy.",
+        "Coverage of the growing resale market for luxury goods, featuring insights from Luxe Talent. Noa shared her perspective with Vozpópuli in her role at the company.",
+        "Industry coverage drawing on Luxe Talent’s 2026 salary study and the changing recruitment landscape in luxury retail.",
+        "FashionUnited’s coverage of Luxe Talent’s 2026 salary study and the French fashion, luxury and retail job market.",
+        "Editorial coverage of Luxe Talent’s 2026 salary study, highlighting hard-to-recruit profiles and changes in luxury hiring.",
+        "Included in Noa’s press list; the direct article URL was not provided, so this entry is not clickable yet.",
+        "Reporting on how artificial intelligence is reshaping roles and talent needs across the fashion industry.",
+        "Coverage of Luxe Talent’s expansion in Europe following the integration of MatchMakers."
+      ],
+      es: [
+        "Artículo firmado por Noa sobre la evolución de los asesores de moda hacia embajadores de marca y la creciente importancia de la experiencia del cliente en el retail de lujo.",
+        "Edición para Benelux del artículo de Noa sobre la transformación del papel de los asesores de venta en la moda y el lujo.",
+        "Artículo de Noa en español, publicado con su nombre y sus cargos de Marketing Manager en Luxe Talent y Project Manager de Retail Academy.",
+        "Reportaje sobre el crecimiento de la segunda mano en el lujo, con aportaciones de Luxe Talent. Noa compartió su perspectiva con Vozpópuli desde su puesto en la empresa.",
+        "Cobertura sectorial basada en el estudio salarial 2026 de Luxe Talent y en los cambios del mercado de selección en el retail de lujo.",
+        "Cobertura de FashionUnited sobre el estudio salarial 2026 de Luxe Talent y el mercado laboral francés de moda, lujo y retail.",
+        "Artículo sobre el estudio salarial 2026 de Luxe Talent, los perfiles difíciles de encontrar y los cambios en la contratación del sector del lujo.",
+        "Incluido en el listado de publicaciones de Noa; no se facilitó el enlace directo al artículo, por lo que esta entrada aún no es clicable.",
+        "Análisis de cómo la inteligencia artificial está transformando los puestos de trabajo y las necesidades de talento en la industria de la moda.",
+        "Noticia sobre la expansión europea de Luxe Talent tras la integración de MatchMakers."
+      ],
+      fr: [
+        "Article signé par Noa sur l’évolution des conseillers de mode en ambassadeurs de marque et l’importance croissante de l’expérience client dans le retail de luxe.",
+        "Édition Benelux de l’article de Noa consacré à l’évolution du rôle des conseillers de vente dans la mode et le luxe.",
+        "Article en espagnol publié sous le nom de Noa, avec ses fonctions de Marketing Manager chez Luxe Talent et de Project Manager de Retail Academy.",
+        "Article sur la croissance de la seconde main dans le luxe, avec des analyses de Luxe Talent. Noa a partagé son point de vue avec Vozpópuli dans le cadre de ses fonctions.",
+        "Couverture sectorielle fondée sur l’étude salariale 2026 de Luxe Talent et sur l’évolution du recrutement dans le retail de luxe.",
+        "Article de FashionUnited sur l’étude salariale 2026 de Luxe Talent et le marché de l’emploi français dans la mode, le luxe et le retail.",
+        "Article consacré à l’étude salariale 2026 de Luxe Talent, aux profils difficiles à recruter et à l’évolution des recrutements dans le luxe.",
+        "Cette publication figure dans la liste de Noa, mais le lien direct vers l’article n’a pas été fourni.",
+        "Analyse de l’impact de l’intelligence artificielle sur les métiers et les besoins en talents dans l’industrie de la mode.",
+        "Article sur l’expansion européenne de Luxe Talent après l’intégration de MatchMakers."
+      ],
+      it: [
+        "Articolo firmato da Noa sull’evoluzione dei consulenti di moda in ambasciatori del marchio e sulla crescente importanza dell’esperienza cliente nel retail di lusso.",
+        "Edizione Benelux dell’articolo di Noa sul cambiamento del ruolo dei consulenti di vendita nella moda e nel lusso.",
+        "Articolo in spagnolo pubblicato a nome di Noa, con i suoi ruoli di Marketing Manager presso Luxe Talent e Project Manager di Retail Academy.",
+        "Articolo sulla crescita del mercato del second hand nel lusso, con contributi di Luxe Talent. Noa ha condiviso il suo punto di vista con Vozpópuli nel suo ruolo aziendale.",
+        "Approfondimento sullo studio salariale 2026 di Luxe Talent e sui cambiamenti nella selezione del personale nel retail di lusso.",
+        "Articolo di FashionUnited sullo studio salariale 2026 di Luxe Talent e sul mercato del lavoro francese nella moda, nel lusso e nel retail.",
+        "Articolo sullo studio salariale 2026 di Luxe Talent, sui profili difficili da reperire e sui cambiamenti nel recruiting del lusso.",
+        "Questa pubblicazione è presente nell’elenco di Noa, ma non è stato fornito il link diretto all’articolo.",
+        "Analisi di come l’intelligenza artificiale stia trasformando i ruoli e il fabbisogno di talenti nell’industria della moda.",
+        "Articolo sull’espansione europea di Luxe Talent dopo l’integrazione di MatchMakers."
+      ],
+      de: [
+        "Von Noa verfasster Beitrag über die Entwicklung von Modeberatern zu Markenbotschaftern und die wachsende Bedeutung des Kundenerlebnisses im Luxus-Einzelhandel.",
+        "Benelux-Ausgabe von Noas Artikel über die veränderte Rolle von Verkaufsberatern in Mode und Luxus.",
+        "Spanischsprachiger Beitrag unter Noas Namen mit ihren Funktionen als Marketing Manager bei Luxe Talent und Project Manager der Retail Academy.",
+        "Bericht über den wachsenden Wiederverkaufsmarkt für Luxusgüter mit Einblicken von Luxe Talent. Noa teilte ihre Perspektive in ihrer Funktion im Unternehmen mit Vozpópuli.",
+        "Branchenbericht auf Grundlage der Gehaltsstudie 2026 von Luxe Talent und zu Veränderungen bei der Personalgewinnung im Luxus-Einzelhandel.",
+        "Bericht von FashionUnited über die Gehaltsstudie 2026 von Luxe Talent und den französischen Arbeitsmarkt für Mode, Luxus und Retail.",
+        "Berichterstattung zur Gehaltsstudie 2026 von Luxe Talent, schwer zu besetzenden Stellenprofilen und Veränderungen bei der Personalgewinnung im Luxussegment.",
+        "Dieser Beitrag ist in Noas Publikationsliste aufgeführt; der direkte Artikellink wurde nicht bereitgestellt.",
+        "Bericht darüber, wie künstliche Intelligenz Rollen und Talentbedarf in der Modebranche verändert.",
+        "Bericht über die Expansion von Luxe Talent in Europa nach der Integration von MatchMakers."
+      ],
+      nl: [
+        "Artikel van Noa over de ontwikkeling van modeadviseurs tot merkambassadeurs en het groeiende belang van klantervaring in luxe retail.",
+        "De Benelux-editie van Noa’s artikel over de veranderende rol van verkoopadviseurs in mode en luxe.",
+        "Noa’s Spaanstalige artikel, gepubliceerd onder haar naam en functies als Marketing Manager bij Luxe Talent en Project Manager van Retail Academy.",
+        "Artikel over de groeiende tweedehandsmarkt voor luxeproducten, met inzichten van Luxe Talent. Noa deelde haar visie met Vozpópuli vanuit haar functie bij het bedrijf.",
+        "Branchebericht op basis van het salarisonderzoek 2026 van Luxe Talent en de veranderende werving in luxe retail.",
+        "FashionUnited-artikel over het salarisonderzoek 2026 van Luxe Talent en de Franse arbeidsmarkt voor mode, luxe en retail.",
+        "Bericht over het salarisonderzoek 2026 van Luxe Talent, moeilijk vervulbare functies en veranderingen in werving binnen de luxesector.",
+        "Deze publicatie staat op Noa’s lijst, maar de directe link naar het artikel is niet aangeleverd.",
+        "Bericht over hoe kunstmatige intelligentie functies en de talentbehoefte in de mode-industrie verandert.",
+        "Bericht over de Europese uitbreiding van Luxe Talent na de integratie van MatchMakers."
+      ]
+    };
+
+function applyLanguage(lang) {
             const d = LANGUAGE_DATA[lang] || LANGUAGE_DATA.en;
             lang = LANGUAGE_DATA[lang] ? lang : 'en';
 
@@ -140,6 +216,12 @@
             put('#work .section-number', d.workNum);
             put('#work .section-title', d.workTitle);
             put('#work .section-subtitle', d.workSub);
+
+            const pressDescriptions = PRESS_TRANSLATIONS[lang] || PRESS_TRANSLATIONS.en;
+            document.querySelectorAll('#work [data-press-desc]').forEach((paragraph) => {
+                const index = Number((paragraph.getAttribute('data-press-desc') || '').replace('press_', '')) - 1;
+                if (index >= 0 && pressDescriptions[index]) paragraph.textContent = pressDescriptions[index];
+            });
             const projects = document.querySelectorAll('#work .project');
             const pkeys = [['p1cat','p1title','p1desc'],['p2cat','p2title','p2desc'],['p3cat','p3title','p3desc'],['p4cat','p4title','p4desc']];
             projects.forEach((project, i) => {
